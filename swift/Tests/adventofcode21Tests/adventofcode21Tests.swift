@@ -6,8 +6,6 @@ final class swiftTests: XCTestCase {
     let depths = depths(fromData: dataDay1)
     let increases = increases(in: depths)
     XCTAssertEqual(increases, 1387)
-    let windowIncreases = windowIncreases(in: depths)
-    XCTAssertEqual(windowIncreases, 1362)
   }
 
   func testDay1Part2() {
