@@ -3,10 +3,10 @@
 include("aoc_day2_data.jl")
 
 const Command = Vector{String}
-const Position = Tuple{Int, Int}
-Position() = Position((0,0))
-const PositionAndAim = Tuple{Int, Int, Int}
-PositionAndAim() = PositionAndAim((0,0,0))
+const Position = Tuple{Int,Int}
+Position() = Position((0, 0))
+const PositionAndAim = Tuple{Int,Int,Int}
+PositionAndAim() = PositionAndAim((0, 0, 0))
 
 function parseData(data::String)::Vector{Command}
     map(line -> split(line, " "), split(data, "\n"))
