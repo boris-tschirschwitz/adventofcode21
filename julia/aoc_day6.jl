@@ -4,7 +4,7 @@ include("aoc_day6_data.jl")
 
 function parseData(data::String)::Vector{Int}
     fish = map(split(data, ",")) do x
-        parse(Int, x)        
+        parse(Int, x)
     end
     ages = zeros(Int, 9)
     for f in fish
@@ -16,7 +16,7 @@ end
 # let's not do an in-place modifying step function, we can't go that many steps anyways
 function step(ages::Vector{Int})::Vector{Int}
     newAges = zeros(Int, 9)
-    for i in 1:8
+    for i = 1:8
         newAges[i] = ages[i+1]
     end
     newAges[9] = ages[1]
@@ -26,7 +26,7 @@ function step(ages::Vector{Int})::Vector{Int}
 end
 
 function wait(days::Int, ages::Vector{Int})::Vector{Int}
-    for _ in 1:days
+    for _ = 1:days
         ages = step(ages)
     end
     ages
