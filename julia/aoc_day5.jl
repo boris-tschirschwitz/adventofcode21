@@ -4,15 +4,15 @@ include("aoc_day5_data.jl")
 
 const Point = CartesianIndex{2}
 Point(coords::AbstractVector{Int}) = CartesianIndex{2}(coords[1], coords[2])
-const Line = Tuple{Point, Point}
+const Line = Tuple{Point,Point}
 Line(p1::Point, p2::Point) = (p1, p2)
 
 function parseData(data::String)::Vector{Line}
     lines = split(data, "\n")
 
     function parseLine(line::AbstractString)::Line
-        coords = map(match(r"^([0-9]*),([0-9]*) -> ([0-9]*),([0-9]*)", line).captures) do 
-            x -> parse(Int, x) + 1
+        coords = map(match(r"^([0-9]*),([0-9]*) -> ([0-9]*),([0-9]*)", line).captures) do x
+            parse(Int, x) + 1
         end
         Line(Point(coords[1:2]), Point(coords[3:4]))
     end
@@ -41,7 +41,7 @@ function drawLine!(field::Matrix{Int}, a::Point, b::Point)
     field[coords] .+= 1
 end
 
-function fieldSize(lines::Vector{Line})::Tuple{Int, Int}
+function fieldSize(lines::Vector{Line})::Tuple{Int,Int}
     m = (0, 0)
     for line in lines
         for point in line
