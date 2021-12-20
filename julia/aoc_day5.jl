@@ -2,48 +2,50 @@
 
 include("aoc_day5_data.jl")
 
-function parseData(data)
+const Point = CartesianIndex{2}
+Point(coords::AbstractVector{Int}) = CartesianIndex{2}(coords[1], coords[2])
+const Line = Tuple{Point, Point}
+Line(p1::Point, p2::Point) = (p1, p2)
+
+function parseData(data::String)::Vector{Line}
     lines = split(data, "\n")
 
-    function parseLine(line)
-        coordPairs = split(line, " -> ")
-
-        function parsePoint(point)
-            map(x -> parse(Int, x), split(point, ","))
+    function parseLine(line::AbstractString)::Line
+        coords = map(match(r"^([0-9]*),([0-9]*) -> ([0-9]*),([0-9]*)", line).captures) do 
+            x -> parse(Int, x) + 1
         end
-
-        map(parsePoint, coordPairs)
+        Line(Point(coords[1:2]), Point(coords[3:4]))
     end
 
     map(parseLine, lines)
 end
 
-function line(a, b)
-    result = CartesianIndex{2}[]
-    step = sign.(b .- a)
+function line(a::Point, b::Point)::Vector{Point}
+    result = Point[]
+    step = Point(sign.(Tuple(b - a)))
     position = a
     while position != b
-        push!(result, CartesianIndex(position[1] + 1, position[2] + 1))
-        position .+= step
+        push!(result, position)
+        position += step
     end
-    push!(result, CartesianIndex(position[1] + 1, position[2] + 1))
+    push!(result, position)
     return result
 end
 
-function isMajor(line)
+function isMajor(line::Line)::Bool
     (line[1][1] == line[2][1]) || (line[1][2] == line[2][2])
 end
 
-function drawLine!(field, a, b)
+function drawLine!(field::Matrix{Int}, a::Point, b::Point)
     coords = line(a, b)
     field[coords] .+= 1
 end
 
-function fieldSize(lines)
-    m = [0, 0]
+function fieldSize(lines::Vector{Line})::Tuple{Int, Int}
+    m = (0, 0)
     for line in lines
         for point in line
-            m = max.(m, point)
+            m = max.(m, Tuple(point))
         end
     end
     return m .+ 1
