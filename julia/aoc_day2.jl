@@ -2,56 +2,64 @@
 
 include("aoc_day2_data.jl")
 
-function parseData(data)
+const Command = Vector{String}
+const Position = Tuple{Int, Int}
+Position() = Position((0,0))
+const PositionAndAim = Tuple{Int, Int, Int}
+PositionAndAim() = PositionAndAim((0,0,0))
+
+function parseData(data::String)::Vector{Command}
     map(line -> split(line, " "), split(data, "\n"))
 end
 
-function follow(directions)
-    function step(total, command) # total = [position, depth]
+function follow(commands::Vector{Command})::Position
+    function step(total::Position, command::Command)::Position
         direction = command[1]
         distance = parse(Int, command[2])
+        (position, depth) = total
         if direction == "forward"
-            total[1] += distance
+            position += distance
         elseif direction == "up"
-            total[2] -= distance
+            depth -= distance
         elseif direction == "down"
-            total[2] += distance
+            depth += distance
         end
-        return total
+        return (position, depth)
     end
 
-    foldl(step, directions, init = [0, 0])
+    foldl(step, commands, init = Position())
 end
 
-function followAimed(directions)
-    function step(total, command) # total = [position, depth, aim]
+function followAimed(commands::Vector{Command})::PositionAndAim
+    function step(total::PositionAndAim, command::Command)
         direction = command[1]
         distance = parse(Int, command[2])
+        (position, depth, aim) = total
         if direction == "forward"
-            total[1] += distance
-            total[2] += distance * total[3]
+            position += distance
+            depth += distance * aim
         elseif direction == "up"
-            total[3] -= distance
+            aim -= distance
         elseif direction == "down"
-            total[3] += distance
+            aim += distance
         end
-        return total
+        return (position, depth, aim)
     end
 
-    foldl(step, directions, init = [0, 0, 0])
+    foldl(step, commands, init = PositionAndAim())
 end
 
 using Test
 
 # Part 1
 
-@test follow(parseData(testData)) == [15, 10]
+@test follow(parseData(testData)) == (15, 10)
 @test let commands = parseData(day2Data), traveled = follow(commands)
     traveled[1] * traveled[2] == 1670340
 end
 
 # Part 2
-@test followAimed(parseData(testData))[1:2] == [15, 60]
+@test followAimed(parseData(testData))[1:2] == (15, 60)
 @test let commands = parseData(day2Data), traveled = followAimed(commands)
     traveled[1] * traveled[2] == 1954293920
 end
