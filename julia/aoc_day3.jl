@@ -2,7 +2,7 @@
 
 include("aoc_day3_data.jl")
 
-function parseData(data::String)::Tuple{Vector{Int}, Int}
+function parseData(data::String)::Tuple{Vector{Int},Int}
     function splitLine(line)
         map(n -> parse(Int, n), collect(line))
     end
