@@ -6,11 +6,11 @@ function parseData(data::String)::Vector{Int}
     map(x -> parse(Int, x), split(data, "\n"))
 end
 
-function countIncreases(depths::Vector{Int})
+function countIncreases(depths::Vector{Int})::Int
     sum(map(<, depths, depths[2:end]))
 end
 
-function windowedDepths(depths)
+function windowedDepths(depths::Vector{Int})::Vector{Int}
     map(+, depths, depths[2:end], depths[3:end])
 end
 
