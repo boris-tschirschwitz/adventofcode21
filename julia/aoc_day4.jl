@@ -4,7 +4,7 @@ include("aoc_day4_data.jl")
 
 const Board = Matrix{Int}
 
-function parseData(data::String)::Tuple{Vector{Int}, Vector{Board}} # (draws, boards)
+function parseData(data::String)::Tuple{Vector{Int},Vector{Board}} # (draws, boards)
     parts = split(data, "\n\n")
     draws = map(x -> parse(Int, x), split(parts[1], ","))
 
@@ -12,7 +12,7 @@ function parseData(data::String)::Tuple{Vector{Int}, Vector{Board}} # (draws, bo
         numberStrings = split(line, " ", keepempty = false)
         map(x -> parse(Int, x), numberStrings)
     end
-    
+
     function splitPart(part)
         lines = split(part, "\n")
         map(splitLine, lines)
@@ -49,7 +49,7 @@ function bingoStep(boards::Vector{Board}, draw::Int)::Vector{Board}
     return boards[bingos]
 end
 
-function runBingo(boards::Vector{Board}, draws::Vector{Int})::Tuple{Int, Board}
+function runBingo(boards::Vector{Board}, draws::Vector{Int})::Tuple{Int,Board}
     for draw in draws
         bingos = bingoStep(boards, draw)
         if !isempty(bingos)
@@ -62,7 +62,7 @@ function sumBoard(board::Board)::Int
     reduce((total, x) -> total + max(x, 0), board, init = 0)
 end
 
-function findLast(boards::Vector{Board}, draws::Vector{Int})::Tuple{Int, Board}
+function findLast(boards::Vector{Board}, draws::Vector{Int})::Tuple{Int,Board}
     remainingBoards = boards
     for draw in draws
         bingos = bingoStep(remainingBoards, draw)
